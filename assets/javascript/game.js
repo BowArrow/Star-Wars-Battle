@@ -1,3 +1,31 @@
+
+
+function label() {
+
+}
+
+function loadCharacter(para) {
+    $(para).each(function () {
+        var div = $("<div>");
+        var name = ($(this).attr("id"));
+        var appendData = $(`#id${name}`)
+        div.addClass(`dropdown-content`);
+        div.attr("id", `label${name}`)
+        div.css({ "bottom": "-68px", "position": "absolute", "color": "white", "width": "120px" })
+        div.appendTo(appendData);
+        var label = $(`#label${name}`);
+        var a = $("<a>");
+        var aTwo = $("<a>")
+        var health = ($(this).attr("data-Health"));
+        var attack = ($(this).attr("data-Attack"));
+        aTwo.text(name);
+        aTwo.appendTo(label);
+        a.text("HP: " + health + " " + "AP: " + attack);
+        a.appendTo(label);
+    });
+}
+
+
 gameObj = {
     elements: {
         characters: $("#characters"),
@@ -18,7 +46,7 @@ gameObj = {
     },
     arrays: {
         characters: ["Rey", "Yoda", "Chewie", "Luke"],
-        enemies: ["Storm Trooper", "Kylo Ren", "Starkiller", "Darth Vader"]
+        enemies: ["Trooper", "Kylo", "Starkiller", "Vader"]
     },
     counters: {
         attack: {
@@ -57,114 +85,199 @@ var health = gameObj.counters.health;
 var select = gameObj.bool.select;
 var loader = gameObj.bool.characterLoad;
 var ready = gameObj.images.ready;
+var heroHCount = 0;
+var enemyHCount = 0;
+var heroACount = 6;
 
-// function load(any) {
-//     for (var i = 0; i < array[any].length; i++) {
-//         image = $("<img>");
-//         image.addClass(`${any} img-fluid float-left mx-2`);
-//         image.attr("src", image[`${any}[i]`]);
-//         image.attr("data-characterAttack", attack[any + i]);
-//         image.attr("data-characterHealth", health[any + i]);        image.attr("data-characterHealth", health[any]);
-//         image.attr("style", "height: 110px")
-//         element[any].append(image);
-//         console.log(enemies)
-//         console.log(characters)
-//     };
-// };
-
-// load(`enemies`);
-// load(`characters`);
-
-function label() {
-
-}
-
-//Loop that creates the character images
-for (var i = 0; i < array.characters.length; i++) {
-    var characterImage = $("<img>");
-    characterImage.addClass("character stats img-fluid float-left");
-    characterImage.attr("src", image.characters[i]);
-    characterImage.attr("data-Attack", attack.characters[i]);
-    characterImage.attr("data-Health", health.characters[i]);
-    characterImage.attr("data-select", false);
-    characterImage.attr("id", array.characters[i])
-    characterImage.css({ "max-width": "110px", "z-index": "2" })
-    element.characters.append(characterImage);
-}
-
-$(".stats").ready(function () {
-    
-
-})
-
-//Loop that creates the enemy images
-for (var i = 3; i >= 0; i--) {
-    var enemyImage = $("<img>");
-    enemyImage.addClass("enemy stats img-fluid float-right");
-    enemyImage.attr("src", image.enemies[i]);
-    enemyImage.attr("data-Attack", attack.enemies[i]);
-    enemyImage.attr("data-Health", health.enemies[i]);
-    enemyImage.attr("data-select", false);
-    enemyImage.css({ "max-width": "110px", "z-index": "2" })
-    enemyImage.attr("id", array.enemies[i])
-    element.enemies.append(enemyImage);
-    console.log(enemyImage)
-}
-
-var character = $(".character");
-
-$(".character").on("click", function () {
-    if (select.characters != true) {
-        select.characters = true;
-        console.log("SelectCharacter: " + select.characters)
-        $(this).attr("style", "border: 3px solid rgba(43,255,0,0.66)")
+function start() {
+    $(".dropdown").remove();
+    $("h2").remove();
+    select.characters = false;
+    select.enemies = false;
+    loader.characters = false;
+    loader.enemies = false;
+    heroHCount = 0;
+    enemyHCount = 0;
+    heroACount = 6;
+    //Loop that creates the character images
+    for (var i = 0; i < array.characters.length; i++) {
+        var characterImage = $("<img>");
+        characterImage.addClass(`character  img-fluid float-left`);
+        characterImage.attr("src", image.characters[i]);
+        characterImage.attr("data-Attack", attack.characters[i]);
+        characterImage.attr("data-Health", health.characters[i]);
+        characterImage.attr("data-select", false);
+        characterImage.attr("id", array.characters[i]);
+        characterImage.css({ "max-width": "110px", "z-index": "2" })
+        var divBox = $("<div>");
+        divBox.addClass("dropdown");
+        divBox.attr("id", `id${array.characters[i]}`);
+        divBox.css({ "width": "110px", "height": "110px", "z-index": "1", "position": "relative" })
+        element.characters.append(divBox);
+        divBox.append(characterImage);
+        loadCharacter(`#${array.characters[i]}`);
     };
-    if (select.characters == true) {
-        for (var j = 0; j < array.characters.length; j++) {
-            if (loader.characters != true && $(this).attr("id") == array.characters[j]) {
-                loader.characters = true;
-                console.log("Character Loaded: " + loader.characters)
-                var images = $("<img>");
-                images.addClass("characterLoaded img-fluid float-left m-5");
-                images.attr("src", ready.characters[j]);
-                images.attr("data-Attack", attack.characters);
-                images.attr("data-Health", health.characters);
-                images.attr("id", array.characters[j]);
-                element.characterReady.append(images);
+
+    //Loop that creates the enemy images
+    for (var i = 3; i >= 0; i--) {
+        var enemyImage = $("<img>");
+        enemyImage.addClass("enemy .dropdown img-fluid float-right");
+        enemyImage.attr("src", image.enemies[i]);
+        enemyImage.attr("data-Attack", attack.enemies[i]);
+        enemyImage.attr("data-Health", health.enemies[i]);
+        enemyImage.attr("data-select", false);
+        enemyImage.css({ "max-width": "110px" })
+        enemyImage.attr("id", array.enemies[i])
+        var divBox = $("<div>");
+        divBox.addClass("dropdown");
+        divBox.attr("id", `id${array.enemies[i]}`);
+        divBox.css({ "width": "110px", "height": "110px", "z-index": "1", "position": "relative", "float": "right" })
+        element.enemies.append(divBox);
+        divBox.append(enemyImage);
+        loadCharacter(`#${array.enemies[i]}`);
+        console.log(enemyImage)
+    }
+
+    $(".character").on("click", function () {
+        if (select.characters != true) {
+            select.characters = true;
+            console.log("SelectCharacter: " + select.characters)
+            $(this).attr("style", "border: 3px solid rgba(43,255,0,0.66)")
+        };
+        if (select.characters == true) {
+            for (var j = 0; j < array.characters.length; j++) {
+                if (loader.characters != true && $(this).attr("id") == array.characters[j]) {
+                    loader.characters = true;
+                    console.log("Character Loaded: " + loader.characters)
+                    var images = $("<img>");
+                    var cHealth = $("#player-health");
+                    var newHead = $("<h2>")
+                    images.addClass("characterLoaded img-fluid float-left m-5");
+                    images.attr("src", ready.characters[j]);
+                    images.attr("data-Attack", attack.characters[j]);
+                    images.attr("data-Health", health.characters[j]);
+                    images.attr("id", array.characters[j]);
+                    images.attr("id", array.characters[j]);
+                    newHead.text("HP: " + health.characters[j] + "  " + "AP: " + attack.characters[j]).css({ "background-color": "black", "color": "white", "opacity": "0.8", "text-align": "center" })
+                    cHealth.append(newHead);
+                    element.characterReady.append(images);
+                }
             }
         }
-    }
-});
+    });
 
-$(".enemy").on("click", function () {
-    if (select.enemies != true) {
-        select.enemies = true;
-        console.log("SelectEnemy: " + select.enemies)
-        $(this).attr("style", "border: 3px solid rgba(255,0,0,1)")
-    };
-    if (select.enemies == true) {
-        for (var j = 3; j >= 0; j--) {
-            if (loader.enemies != true && $(this).attr("id") == array.enemies[j]) {
-                loader.enemies = true;
-                console.log("Enemy Loaded: " + loader.enemies)
-                var images = $("<img>");
-                images.addClass("enemyLoaded img-fluid float-right m-5");
-                images.attr("src", ready.enemies[j]);
-                images.attr("data-Attack", attack.enemies[j]);
-                images.attr("data-Health", health.enemies[j]);
-                images.attr("id", array.enemies[j]);
-                element.enemyReady.append(images);
+    $(".enemy").on("click", function () {
+        if (select.enemies != true) {
+            select.enemies = true;
+            console.log("SelectEnemy: " + select.enemies)
+            $(this).attr("style", "border: 3px solid rgba(255,0,0,1)")
+            enemyHCount = 0;
+        };
+        if (select.enemies === true) {
+            for (var j = 3; j >= 0; j--) {
+                if (loader.enemies != true && $(this).attr("id") == array.enemies[j]) {
+                    loader.enemies = true;
+                    console.log("Enemy Loaded: " + loader.enemies)
+                    var images = $("<img>");
+                    var eHealth = $("#enemy-health");
+                    var newHead = $("<h2>")
+                    images.addClass("enemyLoaded img-fluid float-right m-5");
+                    images.attr("src", ready.enemies[j]);
+                    images.attr("data-Attack", attack.enemies[j]);
+                    images.attr("data-Health", health.enemies[j]);
+                    images.attr("id", array.enemies[j]);
+                    newHead.text("HP: " + health.enemies[j] + "  " + "AP: " + attack.enemies[j]).css({ "background-color": "black", "color": "white", "opacity": "0.8", "text-align": "center" })
+                    eHealth.append(newHead);
+                    element.enemyReady.append(images);
+
+                }
             }
         }
-    }
-});
-var stats = $(".stats")
+    });
+}
 
+start();
 
 $(document).ready(function () {
-    $(".stats li").hover(function () {
-        $(".label", this).slideDown(100);
-    }, function () {
-        $(".label", this).stop().slideUp(100);
-    });
+    
+    if (heroHCount === 0) {
+        $(".attackImg").on("click", function () {
+            
+            console.log("button clicked")
+            var enemy = $(".enemyLoaded");
+            var hero = $(".characterLoaded");
+            var enemyID = enemy.attr("id");
+            var heroID = hero.attr("id");
+            var enemyAttack = (enemy.attr("data-Attack"));
+            var enemyHealth = (enemy.attr("data-Health"));
+            var heroAttack = (hero.attr("data-Attack"));
+            var heroHealth = (hero.attr("data-Health"));
+            if (enemyHCount === 0) {
+                enemyAttack = parseInt(enemyAttack);
+                enemyHealth = parseInt(enemyHealth);
+                heroAttack = parseInt(heroAttack);
+                heroHealth = parseInt(heroHealth);
+                enemyHCount = enemyHealth;
+
+            };
+            if (heroHCount === 0) {
+                heroHCount = heroHealth;
+                heroACount = heroAttack;
+            };
+            function updateScreen(){
+                var eHealth = $("#enemy-health");
+                var cHealth = $("#player-health");
+                cHealth.html("<h2>HP: " + heroHCount + "  " + "AP: " + heroACount.toString() + "</h2>").css({ "background-color": "black", "color": "white", "opacity": "0.8", "text-align": "center", "height": "40px" }).addClass(heroID);
+                eHealth.html("<h2>HP: " + enemyHCount + "  " + "AP: " + enemyAttack.toString() + "</h2>").css({ "background-color": "black", "color": "white", "opacity": "0.8", "text-align": "center", "height": "40px" }).addClass(enemyID);
+            };
+            function attacking() {
+                heroHCount = heroHCount - enemyAttack;
+                enemyHCount = enemyHCount - heroACount;
+                heroACount = heroACount + parseInt(heroAttack);
+                updateScreen();
+
+            };
+            function remChar(){
+                $(`#id${heroID}`).remove();
+                $(`#${heroID}`).remove();
+                $(`#id${enemyID}`).remove();
+                $(`#${enemyID}`).remove();
+            };
+            if (enemyHCount < 0) {
+                $(`#id${enemyID}`).remove();
+                $(`#${enemyID}`).remove();
+                $("<h2>").remove(`.${enemyID}`);
+                loader.enemies = false;
+                select.enemies = false;
+                enemyHCount = 0;
+                updateScreen();
+
+            } else if (enemyHCount > 0){
+                attacking();
+            };
+            function isEmpty( el ){
+                return !$.trim(el.html())
+            }
+            if (isEmpty($('#enemies'))) {
+                alert("You win!");
+                remChar();
+
+                setTimeout(function () {
+                    start();
+                }, 3000);  
+            } else if (heroHCount < 0){
+                alert("You lose..");
+                remChar();
+
+                setTimeout(function () {
+                    start();
+                }, 3000); 
+            }
+           
+            console.log(enemyID);
+            console.log(enemyHCount);
+        });
+    }
+    
 });
+

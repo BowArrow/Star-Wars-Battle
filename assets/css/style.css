@@ -1,21 +1,11 @@
 body {
     background-image: url("../images/background1.jpg");
-    transition: 0.2s;
+    transition: 0.5s;
 }
 
 
 .character {
     height: 110px;
-}
-
-.stats {
-    padding: 5px;
-    text-align: center;
-    color: white;
-}
-
-.stats ul li {
-    display: inline;
 }
 
 .enemy {
@@ -36,6 +26,55 @@ body {
     border-radius: 80px 0 0 80px;
 }
 
-.label {
-    display: none;
+.dropdown {
+    position: relative;
+    display: inline-block;
 }
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    min-width: 110px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    left: -110px;
+    color: #ffffff;
+    background-color: black;
+    padding: 5px 5px;
+    text-decoration: none;
+    display: block;
+}
+
+.arena {
+    background-size: 100%;
+    background-image: url("../images/platform.png");
+    background-repeat:no-repeat;
+    background-position: center 250px;
+    padding-bottom: 200px;
+}
+
+#character-container img {
+    height: 300px;
+    width: auto;
+}
+
+
+
+.attackImg{
+    width: 100%;
+    height: auto;
+}
+
+.attack-button:hover {
+    margin: 10%;
+
+}
+
+.dropdown-content a:hover {background-color: black; left: -110px;}
+
+.dropdown:hover .dropdown-content {display: block;}
+
+.dropdown img:hover {opacity: 0.8;}
